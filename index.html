@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backpack Choice Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Classroom Conjoint Exercise</p>
+        <h1>Choose the Backpack You Would Buy</h1>
+        <p class="intro">
+          You will compare two backpacks at a time. Pick the one you prefer, then
+          decide whether you would actually buy that backpack or choose neither.
+        </p>
+      </header>
+
+      <main id="app" class="app-card" aria-live="polite">
+        <section id="loading-state" class="panel">
+          <h2>Loading study...</h2>
+          <p>Preparing your randomized task set.</p>
+        </section>
+      </main>
+    </div>
+
+    <template id="welcome-template">
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-label">Before you begin</p>
+            <h2>Study Instructions</h2>
+          </div>
+          <p class="pill">7 choice tasks</p>
+        </div>
+
+        <div class="instructions-grid">
+          <article>
+            <h3>What to do</h3>
+            <p>
+              For each task, compare <strong>Backpack A</strong> and
+              <strong>Backpack B</strong>. Choose the backpack you prefer.
+            </p>
+          </article>
+          <article>
+            <h3>Final check</h3>
+            <p>
+              After each comparison, say whether you would actually choose the
+              backpack you selected or choose neither option.
+            </p>
+          </article>
+          <article>
+            <h3>Your ID</h3>
+            <p>
+              Your browser has been assigned a pseudonymous study ID. It does not
+              include your name or email.
+            </p>
+          </article>
+        </div>
+
+        <div class="study-meta">
+          <div>
+            <span class="meta-label">Study ID</span>
+            <code id="respondent-id"></code>
+          </div>
+          <div>
+            <span class="meta-label">Version</span>
+            <code id="study-version"></code>
+          </div>
+        </div>
+
+        <button id="start-button" class="primary-button" type="button">
+          Start task 1
+        </button>
+      </section>
+    </template>
+
+    <template id="task-template">
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-label">Choice task</p>
+            <h2 id="task-title"></h2>
+          </div>
+          <p id="progress-pill" class="pill"></p>
+        </div>
+
+        <div id="save-status" class="save-status"></div>
+
+        <div class="comparison-grid">
+          <article class="profile-card" data-option="A">
+            <div class="profile-card-header">
+              <p class="profile-kicker">Option A</p>
+              <h3>Backpack A</h3>
+            </div>
+            <dl id="profile-a-details" class="attribute-list"></dl>
+            <button class="choice-button" data-choice="A" type="button">
+              Choose Backpack A
+            </button>
+          </article>
+
+          <article class="profile-card" data-option="B">
+            <div class="profile-card-header">
+              <p class="profile-kicker">Option B</p>
+              <h3>Backpack B</h3>
+            </div>
+            <dl id="profile-b-details" class="attribute-list"></dl>
+            <button class="choice-button" data-choice="B" type="button">
+              Choose Backpack B
+            </button>
+          </article>
+        </div>
+
+        <form id="final-choice-form" class="final-choice hidden">
+          <fieldset>
+            <legend id="final-choice-legend"></legend>
+            <label class="radio-card">
+              <input type="radio" name="final-choice" value="selected_product" />
+              <span>Choose the backpack I selected</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="final-choice" value="neither" />
+              <span>Choose neither</span>
+            </label>
+          </fieldset>
+          <button id="submit-task-button" class="primary-button" type="submit">
+            Save this task
+          </button>
+        </form>
+      </section>
+    </template>
+
+    <template id="completion-template">
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-label">Complete</p>
+            <h2>All tasks saved</h2>
+          </div>
+          <p class="pill success-pill">Finished</p>
+        </div>
+
+        <p class="completion-copy">
+          Thank you. Your responses have been recorded. You can now close this
+          page.
+        </p>
+
+        <div class="study-meta">
+          <div>
+            <span class="meta-label">Study ID</span>
+            <code id="completion-respondent-id"></code>
+          </div>
+          <div>
+            <span class="meta-label">Tasks completed</span>
+            <code id="completion-count"></code>
+          </div>
+        </div>
+      </section>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
