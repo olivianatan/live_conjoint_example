@@ -147,29 +147,44 @@ function generateTaskSet() {
 }
 
 function generateProfile(levelUsage) {
-  const profile = {};
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    const candidate = {};
+    const pendingUsage = [];
 
-  STUDY_CONFIG.attributes.forEach((attribute) => {
-    const levelsByUse = [...attribute.levels].sort((left, right) => {
-      const usageGap = levelUsage[attribute.key][left] - levelUsage[attribute.key][right];
-      if (usageGap !== 0) {
-        return usageGap;
-      }
-      return Math.random() - 0.5;
+    STUDY_CONFIG.attributes.forEach((attribute) => {
+      const levelsByUse = [...attribute.levels].sort((left, right) => {
+        const usageGap =
+          levelUsage[attribute.key][left] - levelUsage[attribute.key][right];
+        if (usageGap !== 0) {
+          return usageGap;
+        }
+        return Math.random() - 0.5;
+      });
+
+      const chosenLevel = levelsByUse[0];
+      candidate[attribute.key] = chosenLevel;
+      pendingUsage.push([attribute.key, chosenLevel]);
     });
 
-    const chosenLevel = levelsByUse[0];
-    profile[attribute.key] = chosenLevel;
-    levelUsage[attribute.key][chosenLevel] += 1;
-  });
+    if (isValidProfile(candidate)) {
+      pendingUsage.forEach(([attributeKey, chosenLevel]) => {
+        levelUsage[attributeKey][chosenLevel] += 1;
+      });
+      return candidate;
+    }
+  }
 
-  return profile;
+  throw new Error("Unable to generate a valid profile.");
 }
 
 function sameProfile(profileA, profileB) {
   return STUDY_CONFIG.attributes.every(
     (attribute) => profileA[attribute.key] === profileB[attribute.key]
   );
+}
+
+function isValidProfile(profile) {
+  return !(profile.brand === "Generic" && profile.price === "$90");
 }
 
 function renderWelcome() {
