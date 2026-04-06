@@ -199,14 +199,24 @@ h1 {
   aspect-ratio: 4 / 3;
   min-height: 180px;
   max-height: 220px;
-  padding: 1.35rem;
+  padding: 0;
   border-radius: 18px;
-  border: 1px solid rgba(89, 63, 40, 0.1);
-  background: rgba(255, 255, 255, 0.94);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.profile-image-mat {
+  width: 100%;
+  height: 100%;
+  padding: 1.35rem;
+  border-radius: 18px;
+  border: 1px solid rgba(89, 63, 40, 0.1);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-card.selected {
