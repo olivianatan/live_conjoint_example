@@ -1,6 +1,11 @@
 const STUDY_CONFIG = {
   studyVersion: "backpack-v1",
   totalTasks: 7,
+  imageByStyle: {
+    Minimal: "./images/minimal-backpack.png",
+    Sporty: "./images/sporty-backpack.jpeg",
+    Outdoor: "./images/outdoor-backpack.png",
+  },
   storageKeys: {
     respondentId: "backpack-conjoint.respondent-id",
     sessionState: "backpack-conjoint.session-state",
@@ -199,6 +204,8 @@ function renderCurrentTask() {
 
   node.querySelector("#task-title").textContent = `Task ${task.taskIndex} of ${STUDY_CONFIG.totalTasks}`;
   node.querySelector("#progress-pill").textContent = `${task.taskIndex}/${STUDY_CONFIG.totalTasks}`;
+  populateProfileImage(node.querySelector("#profile-a-image"), task.profileA, "A");
+  populateProfileImage(node.querySelector("#profile-b-image"), task.profileB, "B");
   populateProfileDetails(node.querySelector("#profile-a-details"), task.profileA);
   populateProfileDetails(node.querySelector("#profile-b-details"), task.profileB);
 
@@ -226,6 +233,39 @@ function populateProfileDetails(container, profile) {
     dd.textContent = profile[attribute.key];
     container.append(dt, dd);
   });
+}
+
+function populateProfileImage(imageElement, profile, optionLabel) {
+  const imageSrc = STUDY_CONFIG.imageByStyle[profile.style];
+  imageElement.src = imageSrc;
+  imageElement.alt = `${profile.style} style backpack for option ${optionLabel}`;
+  imageElement.onerror = () => {
+    imageElement.onerror = null;
+    imageElement.src = createPlaceholderImage(profile.style);
+  };
+}
+
+function createPlaceholderImage(styleLabel) {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f4d9ca" />
+          <stop offset="100%" stop-color="#ece3d3" />
+        </linearGradient>
+      </defs>
+      <rect width="800" height="600" rx="36" fill="url(#bg)" />
+      <rect x="250" y="120" width="300" height="340" rx="70" fill="#9a6a48" />
+      <rect x="310" y="170" width="180" height="160" rx="36" fill="#c98a5a" />
+      <rect x="320" y="340" width="160" height="70" rx="22" fill="#7a5339" />
+      <path d="M330 120 C330 60, 470 60, 470 120" stroke="#7a5339" stroke-width="28" fill="none" stroke-linecap="round" />
+      <path d="M250 190 C180 180, 180 420, 250 450" stroke="#7a5339" stroke-width="26" fill="none" stroke-linecap="round" />
+      <path d="M550 190 C620 180, 620 420, 550 450" stroke="#7a5339" stroke-width="26" fill="none" stroke-linecap="round" />
+      <text x="400" y="535" text-anchor="middle" font-family="Manrope, Arial, sans-serif" font-size="36" font-weight="700" fill="#4e392c">${styleLabel} style</text>
+      <text x="400" y="575" text-anchor="middle" font-family="Manrope, Arial, sans-serif" font-size="22" fill="#6a5647">Add matching file in /images to replace this placeholder</text>
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
 function updateSelectedProfile(task) {

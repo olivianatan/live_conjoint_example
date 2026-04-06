@@ -185,6 +185,16 @@ h1 {
   gap: 1rem;
 }
 
+.profile-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  border-radius: 18px;
+  border: 1px solid rgba(89, 63, 40, 0.1);
+  background: linear-gradient(135deg, rgba(244, 217, 202, 0.9), rgba(244, 239, 231, 0.95));
+}
+
 .profile-card.selected {
   outline: 2px solid var(--accent);
   background: rgba(244, 217, 202, 0.35);
