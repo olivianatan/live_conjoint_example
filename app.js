@@ -147,34 +147,27 @@ function generateTaskSet() {
 }
 
 function generateProfile(levelUsage) {
-  for (let attempt = 0; attempt < 50; attempt += 1) {
-    const candidate = {};
-    const pendingUsage = [];
+  const candidate = {};
+  const pendingUsage = [];
 
-    STUDY_CONFIG.attributes.forEach((attribute) => {
-      const levelsByUse = [...attribute.levels].sort((left, right) => {
-        const usageGap =
-          levelUsage[attribute.key][left] - levelUsage[attribute.key][right];
-        if (usageGap !== 0) {
-          return usageGap;
-        }
-        return Math.random() - 0.5;
-      });
+  STUDY_CONFIG.attributes.forEach((attribute) => {
+    let allowedLevels = attribute.levels;
 
-      const chosenLevel = levelsByUse[0];
-      candidate[attribute.key] = chosenLevel;
-      pendingUsage.push([attribute.key, chosenLevel]);
-    });
-
-    if (isValidProfile(candidate)) {
-      pendingUsage.forEach(([attributeKey, chosenLevel]) => {
-        levelUsage[attributeKey][chosenLevel] += 1;
-      });
-      return candidate;
+    // Prevent the single realism violation: Generic backpacks cannot cost $90.
+    if (attribute.key === "price" && candidate.brand === "Generic") {
+      allowedLevels = attribute.levels.filter((level) => level !== "$90");
     }
-  }
 
-  throw new Error("Unable to generate a valid profile.");
+    const chosenLevel = chooseBalancedLevel(attribute.key, allowedLevels, levelUsage);
+    candidate[attribute.key] = chosenLevel;
+    pendingUsage.push([attribute.key, chosenLevel]);
+  });
+
+  pendingUsage.forEach(([attributeKey, chosenLevel]) => {
+    levelUsage[attributeKey][chosenLevel] += 1;
+  });
+
+  return candidate;
 }
 
 function sameProfile(profileA, profileB) {
@@ -183,8 +176,16 @@ function sameProfile(profileA, profileB) {
   );
 }
 
-function isValidProfile(profile) {
-  return !(profile.brand === "Generic" && profile.price === "$90");
+function chooseBalancedLevel(attributeKey, allowedLevels, levelUsage) {
+  const levelsByUse = [...allowedLevels].sort((left, right) => {
+    const usageGap = levelUsage[attributeKey][left] - levelUsage[attributeKey][right];
+    if (usageGap !== 0) {
+      return usageGap;
+    }
+    return Math.random() - 0.5;
+  });
+
+  return levelsByUse[0];
 }
 
 function renderWelcome() {
