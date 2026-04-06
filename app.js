@@ -433,6 +433,12 @@ function setSavingUi(isSaving) {
   controls.forEach((control) => {
     control.disabled = isSaving;
   });
+
+  const overlay = document.getElementById("save-overlay");
+  if (overlay) {
+    overlay.classList.toggle("hidden", !isSaving);
+    overlay.setAttribute("aria-hidden", String(!isSaving));
+  }
 }
 
 function setStatus(message, tone) {
