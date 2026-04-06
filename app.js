@@ -364,16 +364,14 @@ async function handleTaskSubmit(task) {
   queuePendingSubmission(payload);
   advanceTask(task.taskId);
 
-  window.setTimeout(() => {
-    state.saving = false;
-    setSavingUi(false);
+  state.saving = false;
+  setSavingUi(false);
 
-    if (state.currentTaskIndex >= STUDY_CONFIG.totalTasks) {
-      renderCompletion();
-    } else {
-      renderCurrentTask();
-    }
-  }, 180);
+  if (state.currentTaskIndex >= STUDY_CONFIG.totalTasks) {
+    renderCompletion();
+  } else {
+    renderCurrentTask();
+  }
 
   flushPendingSubmissions().catch(() => {
     // Keep queued items for the next retry cycle.
