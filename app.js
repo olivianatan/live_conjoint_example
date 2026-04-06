@@ -359,39 +359,25 @@ async function handleTaskSubmit(task) {
 
   state.saving = true;
   setSavingUi(true);
-  setStatus("Saving task...", "");
+  setStatus("Storing task locally and syncing in the background...", "");
 
-  try {
-    await submitPayload(payload);
-    advanceTask(task.taskId);
-    setStatus("Task saved.", "success");
+  queuePendingSubmission(payload);
+  advanceTask(task.taskId);
 
-    window.setTimeout(() => {
-      if (state.currentTaskIndex >= STUDY_CONFIG.totalTasks) {
-        renderCompletion();
-      } else {
-        renderCurrentTask();
-      }
-    }, 350);
-  } catch (error) {
-    queuePendingSubmission(payload);
-    advanceTask(task.taskId);
-    setStatus(
-      "Task stored locally. It will retry automatically when the connection returns.",
-      "error"
-    );
-
-    window.setTimeout(() => {
-      if (state.currentTaskIndex >= STUDY_CONFIG.totalTasks) {
-        renderCompletion();
-      } else {
-        renderCurrentTask();
-      }
-    }, 500);
-  } finally {
+  window.setTimeout(() => {
     state.saving = false;
     setSavingUi(false);
-  }
+
+    if (state.currentTaskIndex >= STUDY_CONFIG.totalTasks) {
+      renderCompletion();
+    } else {
+      renderCurrentTask();
+    }
+  }, 180);
+
+  flushPendingSubmissions().catch(() => {
+    // Keep queued items for the next retry cycle.
+  });
 }
 
 async function submitPayload(payload) {
@@ -450,6 +436,12 @@ async function flushPendingSubmissions() {
     STUDY_CONFIG.storageKeys.pendingSubmissions,
     JSON.stringify(remaining)
   );
+
+  if (remaining.length === 0) {
+    setGlobalSaveMessage("All saved.");
+  } else {
+    setGlobalSaveMessage("Some responses are still syncing.");
+  }
 }
 
 function setSavingUi(isSaving) {
@@ -475,6 +467,14 @@ function setStatus(message, tone) {
   status.className = "save-status";
   if (tone) {
     status.classList.add(tone);
+  }
+}
+
+function setGlobalSaveMessage(message) {
+  const status = document.getElementById("save-status");
+  if (status) {
+    status.textContent = message;
+    status.className = "save-status success";
   }
 }
 
