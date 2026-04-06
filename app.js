@@ -150,15 +150,38 @@ function generateProfile(levelUsage) {
   const candidate = {};
   const pendingUsage = [];
 
-  STUDY_CONFIG.attributes.forEach((attribute) => {
-    let allowedLevels = attribute.levels;
+  const brandAttribute = STUDY_CONFIG.attributes.find(
+    (attribute) => attribute.key === "brand"
+  );
+  const priceAttribute = STUDY_CONFIG.attributes.find(
+    (attribute) => attribute.key === "price"
+  );
+  const remainingAttributes = STUDY_CONFIG.attributes.filter(
+    (attribute) => !["brand", "price"].includes(attribute.key)
+  );
 
-    // Prevent the single realism violation: Generic backpacks cannot cost $90.
-    if (attribute.key === "price" && candidate.brand === "Generic") {
-      allowedLevels = attribute.levels.filter((level) => level !== "$90");
-    }
+  const chosenBrand = chooseBalancedLevel(
+    brandAttribute.key,
+    brandAttribute.levels,
+    levelUsage
+  );
+  candidate.brand = chosenBrand;
+  pendingUsage.push([brandAttribute.key, chosenBrand]);
 
-    const chosenLevel = chooseBalancedLevel(attribute.key, allowedLevels, levelUsage);
+  const allowedPrices =
+    chosenBrand === "Generic"
+      ? priceAttribute.levels.filter((level) => level !== "$90")
+      : priceAttribute.levels;
+  const chosenPrice = chooseBalancedLevel(
+    priceAttribute.key,
+    allowedPrices,
+    levelUsage
+  );
+  candidate.price = chosenPrice;
+  pendingUsage.push([priceAttribute.key, chosenPrice]);
+
+  remainingAttributes.forEach((attribute) => {
+    const chosenLevel = chooseBalancedLevel(attribute.key, attribute.levels, levelUsage);
     candidate[attribute.key] = chosenLevel;
     pendingUsage.push([attribute.key, chosenLevel]);
   });
