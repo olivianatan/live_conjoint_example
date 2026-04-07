@@ -29,11 +29,11 @@ body {
 .page-shell {
   width: min(1100px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 3rem 0 4rem;
+  padding: 1.5rem 0 2rem;
 }
 
 .hero {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .eyebrow,
@@ -56,17 +56,17 @@ h3 {
 }
 
 h1 {
-  margin-top: 0.35rem;
-  font-size: clamp(2.3rem, 4vw, 4.6rem);
-  line-height: 0.96;
-  max-width: 11ch;
+  margin-top: 0.2rem;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  line-height: 1;
+  max-width: 12ch;
 }
 
 .intro {
   max-width: 55ch;
-  margin: 1rem 0 0;
-  font-size: 1.05rem;
-  line-height: 1.6;
+  margin: 0.55rem 0 0;
+  font-size: 0.96rem;
+  line-height: 1.45;
   color: var(--muted);
 }
 
@@ -80,7 +80,7 @@ h1 {
 
 .panel {
   position: relative;
-  padding: 1.5rem;
+  padding: 1.15rem;
   backdrop-filter: blur(10px);
 }
 
@@ -93,7 +93,7 @@ h1 {
 
 .pill {
   margin: 0;
-  padding: 0.5rem 0.85rem;
+  padding: 0.4rem 0.75rem;
   border-radius: 999px;
   background: var(--accent-soft);
   color: var(--accent-dark);
@@ -115,7 +115,7 @@ h1 {
 
 .instructions-grid {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .instructions-grid article,
@@ -134,7 +134,7 @@ h1 {
 
 .study-meta {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .study-meta code {
@@ -157,8 +157,8 @@ h1 {
 }
 
 .primary-button {
-  margin-top: 1.5rem;
-  padding: 0.95rem 1.15rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1.05rem;
   background: var(--accent);
   color: white;
 }
@@ -177,7 +177,7 @@ h1 {
 
 .comparison-grid {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .profile-card {
@@ -289,7 +289,7 @@ h1 {
 
 .save-status {
   min-height: 1.5rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   font-weight: 700;
 }
 
@@ -352,7 +352,7 @@ h1 {
 @media (max-width: 720px) {
   .page-shell {
     width: min(100% - 1rem, 1100px);
-    padding-top: 1.2rem;
+    padding-top: 0.8rem;
   }
 
   .panel,
