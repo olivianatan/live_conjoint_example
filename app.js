@@ -212,6 +212,8 @@ function chooseBalancedLevel(attributeKey, allowedLevels, levelUsage) {
 }
 
 function renderWelcome() {
+  document.body.classList.remove("in-study");
+
   if (state.currentTaskIndex >= STUDY_CONFIG.totalTasks) {
     renderCompletion();
     return;
@@ -229,6 +231,8 @@ function renderWelcome() {
 }
 
 function renderCurrentTask() {
+  document.body.classList.add("in-study");
+
   const task = state.tasks[state.currentTaskIndex];
   if (!task) {
     renderCompletion();
@@ -477,6 +481,8 @@ function setGlobalSaveMessage(message) {
 }
 
 function renderCompletion() {
+  document.body.classList.add("in-study");
+
   appRoot.innerHTML = "";
   const template = document.getElementById("completion-template");
   const node = template.content.cloneNode(true);
